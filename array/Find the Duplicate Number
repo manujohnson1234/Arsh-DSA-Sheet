@@ -1,0 +1,18 @@
+// approch 1 marking negative for visited numbers
+
+class Solution {
+public:
+    int findDuplicate(vector<int>& nums) {
+        for(int i =0; i < nums.size(); i++){
+            int dup = nums[i];
+            if(dup < 0){
+                dup *= -1;
+            }
+            if(nums[dup] < 0){
+                return dup;
+            }
+            nums[dup] *= -1;
+        }
+        return 0;
+    }
+};
