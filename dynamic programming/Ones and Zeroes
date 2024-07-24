@@ -1,0 +1,60 @@
+class Solution {
+
+    int helper(vector<string>& strs, int i, int m1, int n1, int m, int n,  vector<vector<vector<int>>> &dp){
+        if(i == strs.size()) return 0;
+        
+        if(dp[i][m1][n1] != -1) return dp[i][m1][n1];
+
+        int z = 0;
+        int o = 0;
+        
+        for(int j = 0; j < strs[i].size(); j++){
+            if(strs[i][j] == '0') z++;
+            else o++;
+        }
+
+        int notPick = helper(strs, i+1, m1, n1, m, n, dp);
+
+        int pick = 0;
+        if(m1+z <= m && n1+o <= n){
+            pick = helper(strs, i+1, m1+z, n1+o, m, n, dp)+1;
+        }
+
+        return dp[i][m1][n1] = max(pick, notPick);
+    }
+
+
+
+
+public:
+    int findMaxForm(vector<string>& strs, int m, int n) {
+        
+        vector<vector<vector<int>>> dp(strs.size()+1, vector<vector<int>>(m+1, vector<int>(n+1, 0)));
+
+
+        for(int i = strs.size()-1; i >= 0; i--){
+            int z = 0;
+            int o = 0;
+            for(int j = 0; j < strs[i].size(); j++){
+                if(strs[i][j] == '0')z++;
+                else o++;
+            }
+            for(int j = 0;  j <= m; j++){
+                for(int k = 0; k <= n; k++){
+                    int notpick = dp[i+1][j][k];
+                    int pick = 0;
+                    if(j-z >= 0  && k-o >= 0){
+                        pick = dp[i+1][j-z][k-o] + 1;
+                    }
+                    dp[i][j][k] = max(notpick, pick);
+                }
+            }
+
+
+        }
+
+        
+        return dp[0][m][n];
+
+    }
+};
