@@ -1,0 +1,34 @@
+class Solution{
+    int dp[101][101];
+    
+    int sum(int i, int j, int freq[]){
+        int s = 0;
+        for(int k = i; k <= j; k++) s+= freq[k];
+        return s;
+    }
+    
+    int cost(int i , int j, int freq[]){
+        if(i == j) return freq[i];
+        if(i > j) return 0;
+        
+        if(dp[i][j] != -1) return dp[i][j];
+        
+        int cnt = sum(i,j,freq);
+        
+        
+        int a = INT_MAX;
+        for(int k = i; k <= j; k++){
+            int tem = cost(i,k-1,freq) + cost(k+1,j,freq);
+            a = min(a, tem);
+        }
+        return dp[i][j] =  a + cnt;
+    }
+    
+    
+    public:
+    int optimalSearchTree(int keys[], int freq[], int n)
+    {
+        memset(dp, -1, sizeof(dp));
+        return cost(0,n-1,freq);
+    }
+};
