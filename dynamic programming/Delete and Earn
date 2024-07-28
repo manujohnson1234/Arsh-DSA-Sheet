@@ -1,0 +1,21 @@
+class Solution {
+public:
+    int val[10003];
+    int dp[10003];
+    int deleteAndEarn(vector<int>& nums) {
+        
+        int mx = *max_element(nums.begin(), nums.end());
+
+        for(auto i: nums){
+            val[i] += i; 
+        }
+
+        dp[1] = val[1];
+
+        for(int i = 2; i <= mx; i++){
+            dp[i] = max(dp[i-1], dp[i-2]+val[i]);
+        }
+        return dp[mx];
+
+    }
+};
