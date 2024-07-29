@@ -1,0 +1,13 @@
+int findprofit(int ind, int buy, int k, vector<int> &prices, vector<vector<vector<int>>> &dp){
+        if(ind == prices.size()) return 0;
+
+        if(dp[ind][buy][k] != -1) return dp[ind][buy][k];
+
+        if(buy){
+            if(k){
+                return dp[ind][buy][k] = max(findprofit(ind+1, 0, k-1, prices,dp)-prices[ind], findprofit(ind+1,1,k,prices,dp));
+            }
+            return 0;
+        }
+        return dp[ind][buy][k] = max(findprofit(ind+1,1,k,prices,dp)+prices[ind],findprofit(ind+1,0,k,prices,dp));
+    }
