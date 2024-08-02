@@ -1,0 +1,64 @@
+class Solution {
+
+    void findleft(vector<int> &temp, vector<int> &left){
+        stack<int> st;
+        for(int i = 0; i < temp.size(); i++){
+            while(!st.empty() && temp[st.top()] >= temp[i]){
+                st.pop();
+            }
+            if(st.empty()){
+                left[i] = 0;
+            }else{
+                left[i] = st.top()+1;
+            }
+            st.push(i);
+        }
+    }
+
+    void findright(vector<int> &temp, vector<int> &right){
+        stack<int> st;
+        for(int i = temp.size()-1; i >= 0; i--){
+            while(!st.empty() && temp[st.top()] >= temp[i]){
+                st.pop();
+            }
+            if(st.empty()){
+                right[i] = temp.size()-1;
+            }else{
+                right[i] = st.top()-1;
+            }
+            st.push(i);
+        }
+    }
+
+
+int findMaxOnes(vector<int> &temp){
+    vector<int> left(temp.size(), 0);
+    findleft(temp, left);
+    vector<int> right(temp.size(), 0);
+    findright(temp, right);
+    
+    int ans = 0;
+
+    for(int i=0; i<temp.size(); i++){
+        ans = max(ans, (right[i]-left[i]+1)*temp[i]);
+    }
+    return ans;
+}
+
+
+
+public:
+    int maximalRectangle(vector<vector<char>>& matrix) {
+        vector<int> temp(matrix[0].size(), 0);
+        int ans = 0;
+        for(int i =0; i < matrix.size(); i++){
+            for(int j = 0; j < matrix[0].size(); j++){
+                if(matrix[i][j] == '0') temp[j] = 0;
+                else temp[j] += 1;
+            }
+            int maxOnes = findMaxOnes(temp);
+            ans = max(ans, maxOnes);
+        }
+        return ans;
+    }
+};
